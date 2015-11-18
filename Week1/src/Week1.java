@@ -1,9 +1,12 @@
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Week1 {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
-        System.out.println(getSmallestMultiple(5));
+        System.out.println(doubleFac(3));
     }
 
     // Task 1
@@ -47,17 +50,25 @@ public class Week1 {
     }
 
     // Task 6
-    static long doubleFac(int n) {
-        int fac = 1;
-        for (int i = n; i >= 2; i++) {
+    static long fac(long n) {
+    	int fac = 1;
+        for (long i = n; i >= 2; i--) {
             fac *= i;
         }
         return fac;
     }
-
+    
+    static long doubleFac(int n) {
+        return fac(fac((int)n));
+    }
+    
     // Task 7
     static long kthFac(int k, int n) {
-        return 1L;
+    	long result = n;
+    	for (int i = 0; i < k; i++) {
+    		result = fac(result);
+    	}
+    	return result;
     }
 
     // Task 8
@@ -78,15 +89,8 @@ public class Week1 {
     }
 
     // Task 9
-    static boolean isPalindrome(long n) {
-        String nString = Long.toString(n);
-        return nString.equals(new StringBuffer(nString).reverse().toString());
-    }
-
     static long getLargestPalindrome(long n) {
-        while (!isPalindrome(--n)) {
-            n--;
-        }
+        while (!isPalindrome(String.valueOf(--n)));
         return n;
     }
 
@@ -102,5 +106,136 @@ public class Week1 {
     }
 
     // Task 11
- }
+    static long pow(int a, int b) {
+		if (b < 0) {
+			// exponent < 0 is bth root
+		}
+		if (b == 0) {
+			if (a != 0) {
+				return 1;
+			} else {
+				// 0^0 is undefined
+			}
+		}
+		if (b % 2 == 0) {
+			return pow(a*a, b/2);
+		}
+		if (b % 2 == 1) {
+			return a * pow(a*a, b/2);
+		}
+    	return 0;
+    }
+    
+    // Task 12
+    static int getOddOccurrence(int[] array) {
+    	Map<Integer, Integer> occurences = new HashMap<>();
+    	for (int num : array) {
+    		if (!occurences.containsKey(num)) {
+    			occurences.put(num, 0);
+    		}
+    		occurences.put(num, occurences.get(num) + 1);
+    	}
+    	for (Integer num : occurences.keySet()) {
+    		if (occurences.get(num) % 2 == 1) {
+    			return num;
+    		}
+    	}
+    	return -1;
+    }
+    
+    // Task 13
+    
+    // Task 17
+    static String reverseMe(String arg) {
+    	return new StringBuffer(arg).reverse().toString();
+    }
+    
+    // Task 18
+    static String reverseEveryWord(String arg) {
+    	StringBuilder reverse = new StringBuilder();
+    	String[] words = arg.split("\\s+");
+    	for (String word : words) {
+    		reverse.append(new StringBuffer(word).reverse() + " ");
+    	}
+    	return reverse.toString();
+    }
+    
+    // Task 19
+    static boolean isPalindrome(String arg) {
+        return arg.equals(new StringBuffer(arg).reverse().toString());
+    }
+    
+    // Task 20
+    static boolean isPalindrome(int arg) {
+    	int argCopy = arg;
+    	int reverse = 0;
+    	while (argCopy > 0) {
+    		int digit = argCopy % 10;
+    		reverse = reverse*10 + digit;
+    		argCopy /= 10;
+    	}
+    	return arg == reverse;
+    }
+    
+    // Task 21
+    static String copyEveryChar(String input, int k) {
+    	StringBuilder output = new StringBuilder();
+    	for (char c : input.toCharArray()) {
+    		for (int i = 0; i < k; i++) {
+    			output.append(c);
+    		}
+    	}
+    	return output.toString();
+    }
+    
+    // Task 22
+    static int getPalindromeLength(String input) {
+    	String[] sides = input.split("\\*");
+    	char[] left = reverseMe(sides[0]).toCharArray();
+    	char[] right = sides[1].toCharArray();
+    	int i = -1;
+    	while (left[++i] == right[i]);
+    	return i;
+    }
+    
+    // Task 23
+    static int countOccurrences(String needle, String haystack) {
+    	int occurences = 0;
+    	while (haystack.contains(needle)) {
+    		haystack = haystack.replaceFirst(needle, "");
+    		occurences++;
+    	}
+    	return occurences;
+    }
+    
+    // Task 24
+    static String decodeUrl(String input) {
+    	input = input.replace("%20", " ");
+    	input = input.replace("%3A", ":");
+    	input = input.replace("%3D", "?");
+    	input = input.replace("%2F", "/");
+    	return input;
+    }
+    
+    // Task 25
+    static int sumOfNumbers(String input) {
+    	int sum = 0;
+    	Pattern nums = Pattern.compile("\\d+");
+    	Matcher m = nums.matcher(input);
+    	while (m.find()) {
+    		sum += Integer.parseInt(m.group());
+    	}
+    	return sum;
+    }
+    
+    // Task 26
+    static boolean anagram(String a, String b) {
+    	for(char c : a.toCharArray()) {
+    		b = b.replaceFirst(c+"", "");
+    	}
+    	return b.equals("");
+    }
+    
+    
+}
 
