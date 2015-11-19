@@ -1,14 +1,12 @@
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Week1 {
     public static void main(String[] args) {
-    	int[] nums = new int[] {10, 10};
-        System.out.println(reverseEveryWord("hello word"));
+    	// nothing to put here
     }
 
     // Task 1
@@ -196,11 +194,18 @@ public class Week1 {
     
     // Task 16
     static int[][] rescale(int[][] original, int newWidth, int newHeight) {
-    	/*int[][] rescaled = new int[newWidth][newHeight];
-    	int widthRatio = newWidth / 
+    	double widthRatio = newWidth / (double)original.length;
+    	double heightRatio = newHeight / (double)original[0].length;
     	
-    	return rescaled;*/
-    	return new int[1][1];
+    	int[][] rescale = new int[newWidth][newHeight];
+    	for (int i = 0; i < rescale.length; i++) {
+    		int[] sub = rescale[i];
+    		for (int j = 0; j < sub.length; j++) {
+    			rescale[i][j] = original[(int)(i/widthRatio)][(int)(j/heightRatio)];
+    		}
+    	}
+    	
+    	return rescale;
     }
     
     // Task 17
