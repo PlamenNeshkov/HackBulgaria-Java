@@ -1,12 +1,14 @@
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Week1 {
     public static void main(String[] args) {
-        System.out.println(doubleFac(3));
+    	int[] nums = new int[] {10, 10};
+        System.out.println(reverseEveryWord("hello word"));
     }
 
     // Task 1
@@ -64,6 +66,9 @@ public class Week1 {
     
     // Task 7
     static long kthFac(int k, int n) {
+    	if (k < 0 || n < 0) {
+    		//TODO throw exception
+    	}
     	long result = n;
     	for (int i = 0; i < k; i++) {
     		result = fac(result);
@@ -108,13 +113,13 @@ public class Week1 {
     // Task 11
     static long pow(int a, int b) {
 		if (b < 0) {
-			// exponent < 0 is bth root
+			//TODO throw exception - exponent < 0 is the same as bth root
 		}
 		if (b == 0) {
 			if (a != 0) {
 				return 1;
 			} else {
-				// 0^0 is undefined
+				//TODO throw exception - 0^0 is undefined
 			}
 		}
 		if (b % 2 == 0) {
@@ -144,6 +149,59 @@ public class Week1 {
     }
     
     // Task 13
+    static long maximalScalarSum(int[] a, int[] b) {
+    	Arrays.sort(a);
+    	Arrays.sort(b);
+    	long sum = 0;
+    	for (int i : a) {
+    		for (int j : b) {
+    			sum += i * j;
+    		}
+    	}
+    	return sum;
+    }
+    
+    // Task 14
+    static int maxSpan(int[] numbers) {
+    	int[] unique = Arrays.stream(numbers).distinct().toArray();
+    	int span = Integer.MIN_VALUE;
+    	for (int val : unique) {
+    		int i = -1;
+    		while (numbers[++i] != val);
+    		
+    		int j = numbers.length;
+    		while (numbers[--j] != val);
+    		
+    		int currSpan = 1 + (j - i);
+    		if (currSpan > span) {
+    			span = currSpan;
+    		}
+    	}
+    	return span;
+    }
+    
+    // Task 15
+    static boolean canBalance(int[] numbers) {
+    	int leftSum = 0;
+    	int rightSum = 0;
+    	for (int i = 0; i < numbers.length - 1; i++) {
+    		leftSum = Arrays.stream(Arrays.copyOfRange(numbers, 0, i)).sum();
+    		rightSum = Arrays.stream(Arrays.copyOfRange(numbers, i + 1, numbers.length - 1)).sum();
+    		if (leftSum == rightSum) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    // Task 16
+    static int[][] rescale(int[][] original, int newWidth, int newHeight) {
+    	/*int[][] rescaled = new int[newWidth][newHeight];
+    	int widthRatio = newWidth / 
+    	
+    	return rescaled;*/
+    	return new int[1][1];
+    }
     
     // Task 17
     static String reverseMe(String arg) {
@@ -210,10 +268,10 @@ public class Week1 {
     
     // Task 24
     static String decodeUrl(String input) {
-    	input = input.replace("%20", " ");
-    	input = input.replace("%3A", ":");
-    	input = input.replace("%3D", "?");
-    	input = input.replace("%2F", "/");
+    	input = input.replace("%20", " ")
+    	             .replace("%3A", ":")
+    	             .replace("%3D", "?")
+    	             .replace("%2F", "/");
     	return input;
     }
     
@@ -235,7 +293,5 @@ public class Week1 {
     	}
     	return b.equals("");
     }
-    
-    
 }
 
