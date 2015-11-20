@@ -1,7 +1,7 @@
 
-public class Task9 extends Task19 {
+public class Task9 {
 	static long getLargestPalindrome(long n) {
-        while (!isPalindrome(String.valueOf(--n)));
+        while (!Task19.isPalindrome(String.valueOf(--n)));
         return n;
     }
 }
