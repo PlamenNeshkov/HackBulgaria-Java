@@ -1,12 +1,17 @@
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
 
 public class Week1 {
     public static void main(String[] args) {
-    	// nothing to put here
+    	convertToGreyscale("/home/plamen/test.jpg");
     }
 
     // Task 1
@@ -110,22 +115,22 @@ public class Week1 {
 
     // Task 11
     static long pow(int a, int b) {
-		if (b < 0) {
-			//TODO throw exception - exponent < 0 is the same as bth root
-		}
-		if (b == 0) {
-			if (a != 0) {
-				return 1;
-			} else {
-				//TODO throw exception - 0^0 is undefined
-			}
-		}
-		if (b % 2 == 0) {
-			return pow(a*a, b/2);
-		}
-		if (b % 2 == 1) {
-			return a * pow(a*a, b/2);
-		}
+    	if (b < 0) {
+    		//TODO throw exception - exponent < 0 is the same as bth root
+    	}
+    	if (b == 0) {
+    		if (a != 0) {
+    			return 1;
+    		} else {
+    			//TODO throw exception - 0^0 is undefined
+    		}
+    	}
+    	if (b % 2 == 0) {
+    		return pow(a*a, b/2);
+    	}
+    	if (b % 2 == 1) {
+    		return a * pow(a*a, b/2);
+    	}
     	return 0;
     }
     
@@ -297,6 +302,85 @@ public class Week1 {
     		b = b.replaceFirst(c+"", "");
     	}
     	return b.equals("");
+    }
+    
+    // Task 27
+    static boolean hasAnagramOf(String a, String b) {
+    	char[] pattern = a.toCharArray();
+    	char[] text = b.toCharArray();
+    	int patLength = pattern.length;
+    	int txtLength = text.length;
+    	
+    	if (patLength > txtLength) {
+    		return false;
+    	}
+    	
+    	Map<Character, Integer> countPat = new HashMap<>();
+    	Map<Character, Integer> countTxt = new HashMap<>();
+    	for (int i = 0; i < patLength; i++) {
+    		int currPat;
+    		if (!countPat.containsKey(pattern[i])) {
+    			currPat = 0;
+    		} else {
+    			currPat = countPat.get(pattern[i]);
+    		}
+    		int currTxt;
+    		if (!countTxt.containsKey(text[i])) {
+    			currTxt = 0;
+    		} else {
+    			currTxt = countTxt.get(text[i]);
+    		}
+    		
+    		countPat.put(pattern[i], currPat + 1);
+    		countTxt.put(text[i], currTxt + 1);
+    	}
+    	for (int i = patLength; i < txtLength; i++) {
+    		if (countPat.equals(countTxt)) {
+    			return true;
+    		}
+    		int currTxt;
+    		if (!countTxt.containsKey(text[i])) {
+    			currTxt = 0;
+    		} else {
+    			currTxt = countTxt.get(text[i]);
+    		}
+    		countTxt.put(text[i], currTxt + 1);
+    		countTxt.put(text[i - patLength], countTxt.get(text[i - patLength]) - 1);
+    	}
+    	if (countPat.equals(countTxt)) {
+    		return true;
+    	}
+    	return false;
+    }
+    
+    // Task 28
+    static void convertToGreyscale(String imgpath) {
+    	try {
+    		BufferedImage img = ImageIO.read(new File(imgpath));
+    		int w = img.getWidth();
+    		int h = img.getHeight();
+    		for (int i = 0; i < w; i++) {
+    			for (int j = 0; j < h; j++) {
+    				Color pixel = new Color(img.getRGB(i, j));
+    				int red = pixel.getRed();
+    			    int green = pixel.getGreen();
+    			    int blue = pixel.getBlue();
+    				int gray = (red + green + blue) / 3;
+    				int alpha = pixel.getAlpha();
+    				Color grayPixel = new Color(gray, gray, gray, alpha);
+    				img.setRGB(i, j, grayPixel.getRGB());
+    			}
+    		}
+    		String fileExtension = Arrays.stream(imgpath.split("\\."))
+    				                     .reduce((prev, curr) -> curr)
+    				                     .get()
+    				                     .toUpperCase();
+    		System.out.println(fileExtension);
+    		ImageIO.write(img, fileExtension, new File(imgpath));
+    	} catch (IOException ex) {
+    		System.err.println(ex);
+    		return;
+    	}
     }
 }
 
