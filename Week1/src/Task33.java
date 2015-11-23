@@ -85,46 +85,16 @@ public class Task33 {
 		return msg.toString();
 	}
 
-	static List<Integer> messageToNumbers(String msg) {
-		String[] buttons = new String[] {" ", "", "abc", "def", "ghi", "jkl", 
-				                         "mno", "pqrs", "tuv", "wxyz"};
-		int[] indices = new int[] {2,2,2,3,3,3,4,4,4,5,5,5,6,6,6,7,7,7,7,
-				                   8,8,8,9,9,9,9};
-		
-		List<Integer> result = new ArrayList<>();
-		
-		char[] letters = msg.toCharArray();
-		for (int i = 0; i < letters.length; i++) {
-			char curr = letters[i];
-			
-			if (Character.isUpperCase(curr)) {
-				result.add(1);
-				curr = Character.toLowerCase(curr);
-			}
-			
-			if (Character.isWhitespace(curr)) {
-				result.add(0);
-				continue;
-			} 
-				
-			int index = indices[curr - 'a'];
-			int times = buttons[index].indexOf(curr) + 1;
-			for (int j = 0; j < times; j++) {
-				result.add(index);
-			}
-			
-			if (i + 1 < letters.length) {
-				char next = letters[i + 1];
-				int nextIndex = -1;
-				if (!Character.isWhitespace(next)) {
-					nextIndex = indices[next - 'a'];
-				}
-				if (nextIndex == index) {
-					result.add(-1);
-				}
-			}
+	static int[] messageToNumbers(String msg) {
+		char[] chars = msg.toCharArray();
+		List<Integer> numbers = new ArrayList<>();
+
+		Map<Integer, String> keypad = new HashMap<>();
+
+		for (int i = 0; i < chars.length; i++) {
+
 		}
-		
-		return result;
+		// TODO Implement
+		return new int[1];
 	}
 }
