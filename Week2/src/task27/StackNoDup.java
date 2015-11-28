@@ -1,4 +1,6 @@
-package task26;
+package task27;
+
+import task26.StackImp1;
 
 public class StackNoDup<T> extends StackImp1<T> {
 	
@@ -17,6 +19,8 @@ public class StackNoDup<T> extends StackImp1<T> {
 }
 
 class DuplicateElementException extends Exception {
+
+	private static final long serialVersionUID = 1L;
 
 	public DuplicateElementException() {}
 	
