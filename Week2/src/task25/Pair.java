@@ -1,20 +1,29 @@
 package task25;
 
-public final class Pair {
-	private final Object first;
-	private final Object second;
+public class Pair<T> {
 	
-	public Pair(Object first, Object second) {
+	private T first;
+	private T second;
+	
+	public Pair(T first, T second) {
 		this.first = first;
 		this.second = second;
 	}
 	
-	public Object getFirst() {
+	public T getFirst() {
 		return first;
 	}
 	
-	public Object getSecond() {
+	public T getSecond() {
 		return second;
+	}
+	
+	public void setFirst(T first) {
+		this.first = first;
+	}
+	
+	public void setSecond(T second) {
+		this.second = second;
 	}
 	
 	public String toString() {
@@ -29,7 +38,7 @@ public final class Pair {
 		return pair.toString(); 
 	}
 	
-	public boolean equals(Pair other) {
+	public boolean equals(Pair<T> other) {
 		if (this.first.equals(other.first) 
 	       && this.second.equals(other.second)) {
 			return true;
