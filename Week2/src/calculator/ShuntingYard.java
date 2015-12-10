@@ -46,10 +46,7 @@ public class ShuntingYard {
 						 && (getPrecedence(token) < getPrecedence(opStack.peek())))) {
 						
 						output.add(opStack.pop());
-					
-					} else {
-						break;
-					}
+					} 
 				}
 				opStack.push(token);
 			} else if (token.equals("(")) {
@@ -91,6 +88,9 @@ public class ShuntingYard {
 					break;
 				case "/":
 					numStack.push(left / right);
+					break;
+				case "^":
+					numStack.push(Math.pow(left, right));
 					break;
 				}
 			} else {
