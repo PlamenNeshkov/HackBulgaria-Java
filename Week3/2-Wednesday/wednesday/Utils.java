@@ -66,4 +66,6 @@ public class Utils {
 			ReverseCollection.reverse(collection);
 		}
 	}
-}
+	
+	static <T> T[] findDuplicates(Collection<T> a, Collection<T> b, Collection<T> c) {
+	}
