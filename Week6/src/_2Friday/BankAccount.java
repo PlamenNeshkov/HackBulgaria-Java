@@ -1,13 +1,13 @@
 package _2Friday;
 
-import javax.print.attribute.standard.MediaSize;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-public class BankAccount {
+public class BankAccount implements Serializable {
     private final String m_id;
 
     private String m_firstName;

@@ -1,5 +1,6 @@
 package _2Friday;
 
+import java.io.*;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
@@ -8,38 +9,68 @@ public class Main {
     static Bank bank = new Bank();
 
     public static void main(String[] args) {
-        String command = sc.nextLine();
-        while (!command.equals("exit")) {
-            if (command.equals("create_account")) {
-                createAccount();
-            } else if (command.equals("list_accounts")) {
-                listAccounts();
-            } else {
-                System.out.print("Account ID: ");
-                String accountId = sc.nextLine();
-                BankAccount account = bank.get(accountId);
+        bank = loadAccounts(bank);
 
-                if (account == null) {
-                    System.err.println("An account with this ID doesn't exist.");
-                    command = sc.nextLine();
-                    continue;
+        try {
+            BankAccount account;
+
+            String command = sc.nextLine();
+            while (!command.equals("exit")) {
+                switch (command) {
+                    case "create_account":
+                        createAccount();
+                        break;
+                    case "list_accounts":
+                        listAccounts();
+                        break;
+                    case "show_history":
+                        account = getAccount();
+                        showHistory(account);
+                        saveAccount(account);
+                        break;
+                    case "add_money":
+                        account = getAccount();
+                        addMoney(account);
+                        saveAccount(account);
+                        break;
+                    case "withdraw_money":
+                        account = getAccount();
+                        withdrawMoney(getAccount());
+                        saveAccount(account);
+                        break;
+                    case "transfer_money":
+                        account = getAccount();
+                        transferMoney(getAccount());
+                        saveAccount(account);
+                        break;
+                    case "calculate_amount":
+                        account = getAccount();
+                        calculateAmount(getAccount());
+                        saveAccount(account);
+                        break;
+                    default:
+                        throw new NoSuchCommandException();
                 }
 
-                if (command.equals("show_history")) {
-                    showHistory(account);
-                } else if (command.equals("add_money")) {
-                    addMoney(account);
-                } else if (command.equals("withdraw_money")) {
-                    withdrawMoney(account);
-                } else if (command.equals("transfer_money")) {
-                    transferMoney(account);
-                } else if (command.equals("calculate_amount")) {
-                    calculateAmount(account);
-                }
+                command = sc.nextLine();
             }
-
-            command = sc.nextLine();
+        } catch (NoSuchCommandException e) {
+            System.err.println("Error: Invalid command.");
+        } catch (NoSuchAccountException e) {
+            System.err.println("Error: Account with this ID doesn't exist.");
+        } catch (IOException e) {
+            System.err.println("Error: Unable to save account.");
         }
+    }
+
+    static private BankAccount getAccount() throws NoSuchAccountException {
+        System.out.print("Account ID: ");
+        String accountId = sc.nextLine();
+        BankAccount account = bank.get(accountId);
+        if (account == null) {
+            throw new NoSuchAccountException();
+        }
+        return account;
     }
 
     static private void createAccount() {
@@ -65,6 +96,7 @@ public class Main {
             BankAccount account = new BankAccount(firstName, lastName, birthdate,
                     balance, interest, interestType);
             bank.set(account);
+            saveAccount(account);
             System.out.println(String.format("Account ID %s successfully created!", account.getId()));
         } catch (NumberFormatException e) {
             System.err.println("Error: Invalid numeric value entered.");
@@ -74,6 +106,8 @@ public class Main {
             System.err.println("Error: Invalid interest type. Please use \"simple\" or \"complex\"");
         } catch (DateTimeParseException e) {
             System.err.println("Error: Invalid birthdate.");
+        } catch (IOException e) {
+            System.err.println("Error: Can't save account.");
         }
     }
 
@@ -171,5 +205,68 @@ public class Main {
 
             printHorizontalRule();
         }
+    }
+
+    static void saveAccount(BankAccount account) throws IOException {
+        File dataDir = new File("data/");
+        if (!dataDir.exists()) {
+            dataDir.mkdirs();
+        }
+
+        BufferedOutputStream out = null;
+        ObjectOutputStream objOut = null;
+
+        try {
+            out = new BufferedOutputStream(new FileOutputStream("data/" + account.getId() + ".ser"));
+            objOut = new ObjectOutputStream(out);
+            objOut.writeObject(account);
+        } finally {
+            if (objOut != null) {
+                objOut.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+
+    static Bank loadAccounts(Bank bank) {
+        File dataDir = new File("data/");
+        if (!dataDir.exists()) {
+            return bank;
+        }
+
+        String[] accountPaths = dataDir.list();
+        try {
+            for (String accountPath : accountPaths) {
+                BufferedInputStream in = new BufferedInputStream(new FileInputStream("data/" + accountPath));
+                ObjectInputStream objIn = new ObjectInputStream(in);
+                BankAccount account = (BankAccount) objIn.readObject();
+                bank.set(account);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bank;
+    }
+}
+
+class NoSuchCommandException extends Exception {
+    public NoSuchCommandException() {
+        super();
+    }
+
+    public NoSuchCommandException(String message) {
+        super(message);
+    }
+}
+
+class NoSuchAccountException extends Exception {
+    public NoSuchAccountException() {
+        super();
+    }
+
+    public NoSuchAccountException(String message) {
+        super(message);
     }
 }
