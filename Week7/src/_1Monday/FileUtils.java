@@ -31,18 +31,14 @@ public class FileUtils {
         BufferedReader buf = null;
         StringBuilder builder = new StringBuilder();
 
-        try {
-            buf = new BufferedReader(new FileReader(file));
+        try (buf = new BufferedReader(new FileReader(file))){
             String line;
 
             builder.append(buf.readLine());
             while ((line = buf.readLine()) != null) {
                 builder.append(System.lineSeparator());
                 builder.append(line);
-            }
-        } finally {
-            if (buf != null) {
-                buf.close();
+                }
             }
         }
 
