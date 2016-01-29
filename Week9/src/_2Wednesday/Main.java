@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) {
         Foo myFoo = new Foo(1, "abc", true);
-        
+
         Arrays.stream(myFoo.getClass().getAnnotations()).forEach(System.out::println);
 
         System.out.println(myFoo.getClass().getAnnotation(ClassInfo.class));
