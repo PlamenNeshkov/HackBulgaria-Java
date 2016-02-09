@@ -12,6 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
+ * Week 11 Task 2
  * Created by plamen on 2/8/16.
  */
 public class ParserRunnable implements Runnable {
@@ -27,10 +28,12 @@ public class ParserRunnable implements Runnable {
 
     @Override
     public void run() {
-        String contents = null;
+        String contents = "";
         try {
             contents = mFutureContents.get();
         } catch (InterruptedException | ExecutionException e) {}
+
+        System.out.printf("Parsing %s...%n", mUrl);
 
         if (contents.contains(mCrawlerState.getNeedle())) {
             mCrawlerState.found(mUrl);
@@ -44,11 +47,13 @@ public class ParserRunnable implements Runnable {
             System.err.println(mUrl);
         }
 
-        for (String link : links) {
-            if (mCrawlerState.isVisited(link)) {
-                continue;
+        if (links != null) {
+            for (String link : links) {
+                if (mCrawlerState.isVisited(link)) {
+                    continue;
+                }
+                mCrawlerState.enqueue(link);
             }
-            mCrawlerState.enqueue(link);
         }
     }
 

@@ -12,7 +12,11 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.util.concurrent.Callable;
 
-public class GetCallable implements Callable {
+/**
+ * Week 11 Task 2
+ * Created by plamen on 2/8/16.
+ */
+public class GetCallable implements Callable<String> {
     private final CloseableHttpClient mHttpClient;
     private final HttpContext mContext;
     private final HttpGet mGet;
@@ -27,15 +31,10 @@ public class GetCallable implements Callable {
     public String call() throws Exception {
         System.out.println(mGet.toString());
         String contents = null;
-        try {
-            CloseableHttpResponse response = mHttpClient.execute(
-                    mGet, mContext);
-            try {
-                HttpEntity entity = response.getEntity();
-                contents = EntityUtils.toString(entity);
-            } finally {
-                response.close();
-            }
+
+        try (CloseableHttpResponse response = mHttpClient.execute(mGet, mContext)) {
+            HttpEntity entity = response.getEntity();
+            contents = EntityUtils.toString(entity);
         } catch (ClientProtocolException e) {
             System.err.println("Protocol error");
         } catch (IOException e) {

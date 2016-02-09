@@ -10,12 +10,13 @@ import java.net.URL;
 import java.util.concurrent.*;
 
 /**
+ * Week 11 Task 2
  * Created by plamen on 2/8/16.
  */
 public class Crawler {
     private final CrawlerState mCrawlerState;
 
-    private ExecutorService executor = Executors.newFixedThreadPool(4);
+    private ExecutorService executor = Executors.newFixedThreadPool(2);
     private PoolingHttpClientConnectionManager mConnectionManager = new PoolingHttpClientConnectionManager();
     private CloseableHttpClient mClient = HttpClients.custom()
             .setConnectionManager(mConnectionManager)
