@@ -1,0 +1,6 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="TomcatIntro">
+    <output-path>$PROJECT_DIR$/out/artifacts/TomcatIntro</output-path>
+    <root id="root" />
+  </artifact>
+</component>
